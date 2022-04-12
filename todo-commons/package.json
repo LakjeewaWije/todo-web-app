@@ -2,7 +2,8 @@
   "name": "todo-commons",
   "version": "1.0.0",
   "description": "common package for todo fe and be",
-  "main": "index.js",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "test": "echo \"Error: no test specified\" && exit 1"

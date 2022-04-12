@@ -1,6 +1,6 @@
 
 export interface Todo {
-    _id?: string;
+    id?: string;
     created_at?: Date;
     title: string;
     status: string;
@@ -8,7 +8,7 @@ export interface Todo {
 }
 
 export interface SubTask {
-    _id?: string;
+    id?: string;
     todo_id: string;
     created_at?: Date;
     title: string;
