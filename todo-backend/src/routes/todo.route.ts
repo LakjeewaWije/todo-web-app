@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
 import { Todo, SubTask } from "todo-commons"
 import { updateAllSubTasks } from "../controllers/subtask.controller";
-import { createTodo, updateTodo } from "../controllers/todo.controller";
+import { createTodo, getAllTodos, getSingleTodo, updateTodo } from "../controllers/todo.controller";
 import { TodoModel } from "../models/todo-model";
 var router = express.Router();
 
@@ -14,10 +14,12 @@ router.post("/", async function (req: Request, res: Response) {
         const data: Todo = req.body;
         const todo: Todo = await createTodo(data);
 
-        if (todo) {
+        const result: Todo = await getSingleTodo(todo.id);
+
+        if (result) {
             res
                 .status(200)
-                .send(todo);
+                .send(result);
         } else {
             res
                 .status(500)
@@ -45,10 +47,12 @@ router.patch("/:id", async function (req: Request, res: Response) {
             subtasks = await updateAllSubTasks(id, data);
         }
 
-        if (todo) {
+        const result: Todo = await getSingleTodo(id);
+
+        if (result) {
             res
                 .status(200)
-                .send(todo);
+                .send(result);
         } else {
             res
                 .status(500)
@@ -62,16 +66,27 @@ router.patch("/:id", async function (req: Request, res: Response) {
 });
 
 /**
- * get todo
+ * get todos
  */
 router.get("/", async function (req: Request, res: Response) {
+    try {
+        let todo: Todo[] = await getAllTodos();
+        res.status(200).send(todo);
+    } catch (error) {
+        res.status(500).send(error);
+    }
+});
 
-
-
-    if (true) {
-        res.status(200).send("todo");
-    } else {
-        res.status(500).send({ error: `fetching grid failed`, data: [] });
+/**
+ * get single todo with subtasks
+ */
+router.get("/:id", async function (req: Request, res: Response) {
+    try {
+        const id = req.params.id;
+        let todo: Todo = await getSingleTodo(id);
+        res.status(200).send(todo);
+    } catch (error) {
+        res.status(500).send(error);
     }
 });
 
