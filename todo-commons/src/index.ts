@@ -1,1 +1,1 @@
-export {Task,SubTask} from "./interfaces";
+export {Todo,SubTask} from "./interfaces";
