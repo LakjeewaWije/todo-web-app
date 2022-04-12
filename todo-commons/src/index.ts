@@ -1,1 +1,1 @@
-console.log("All the interfaces");
+export {Task,SubTask} from "./interfaces";

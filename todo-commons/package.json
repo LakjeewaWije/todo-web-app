@@ -4,6 +4,7 @@
   "description": "common package for todo fe and be",
   "main": "index.js",
   "scripts": {
+    "build": "tsc -p tsconfig.json",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Lakjeewa Wijebandara",
