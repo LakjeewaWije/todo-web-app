@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
 import { Todo, SubTask } from "todo-commons"
 import { checkAllCompletedSubTasks, createSubTask, updateSubTask } from "../controllers/subtask.controller";
-import { updateTodo } from "../controllers/todo.controller";
+import { getSingleTodo, updateTodo } from "../controllers/todo.controller";
 import { SubTaskModel, TodoModel } from "../models/todo-model";
 var router = express.Router();
 
@@ -12,11 +12,15 @@ router.post("/", async function (req: Request, res: Response) {
     try {
         const data: SubTask = req.body;
         const subtask: SubTask = await createSubTask(data);
+        // set status of todo to pending when a new subtask is added
+        await updateTodo(data.todo_id, { status: "PENDING" } as any);
 
-        if (subtask) {
+        const result: Todo = await getSingleTodo(data.todo_id);
+
+        if (result) {
             res
                 .status(200)
-                .send(subtask);
+                .send(result);
         } else {
             res
                 .status(500)
@@ -46,11 +50,12 @@ router.patch("/:id", async function (req: Request, res: Response) {
             await updateTodo(subtask.todo_id, data as any);
         }
 
+        const result: Todo = await getSingleTodo(subtask.todo_id);
 
-        if (subtask) {
+        if (result) {
             res
                 .status(200)
-                .send(subtask);
+                .send(result);
         } else {
             res
                 .status(500)

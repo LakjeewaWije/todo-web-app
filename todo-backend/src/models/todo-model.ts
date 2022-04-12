@@ -10,7 +10,7 @@ export class TodoModel extends db.BaseModel {
     }
     static get relationMappings() {
         return {
-            subTasks: {
+            subtasks: {
                 relation: db.BaseModel.HasManyRelation,
                 modelClass: SubTaskModel,
                 join: {
