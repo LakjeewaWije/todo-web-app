@@ -1,7 +1,8 @@
-import { Todo } from "todo-commons";
+import { SubTask, Todo } from "todo-commons";
 import { db } from "../database";
 
-export interface TodoModel extends Todo {}
+export interface TodoModel extends Todo { }
+export interface SubTaskModel extends SubTask { }
 
 export class TodoModel extends db.BaseModel {
     static get tableName() {

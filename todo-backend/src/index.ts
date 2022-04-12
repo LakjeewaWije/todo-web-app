@@ -22,6 +22,9 @@ app.get('/', (req, res) => {
 var todoRoutes = require('./routes/todo.route');
 app.use('/todo', todoRoutes);
 
+var subTaskRoutes = require('./routes/subtask.route');
+app.use('/subtask', subTaskRoutes);
+
 app.listen(port, () => {
   console.log(`Todo app listening on port ${port}`);
   // connecting to db

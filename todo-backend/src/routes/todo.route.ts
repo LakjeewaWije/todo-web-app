@@ -1,5 +1,7 @@
 import express, { Request, Response } from "express";
 import { Todo, SubTask } from "todo-commons"
+import { updateAllSubTasks } from "../controllers/subtask.controller";
+import { createTodo, updateTodo } from "../controllers/todo.controller";
 import { TodoModel } from "../models/todo-model";
 var router = express.Router();
 
@@ -10,7 +12,7 @@ var router = express.Router();
 router.post("/", async function (req: Request, res: Response) {
     try {
         const data: Todo = req.body;
-        const todo: Todo = await TodoModel.query().insert(data).returning("*");
+        const todo: Todo = await createTodo(data);
 
         if (todo) {
             res
@@ -36,7 +38,12 @@ router.patch("/:id", async function (req: Request, res: Response) {
         const data: Todo = req.body;
         const id = req.params.id;
 
-        const todo: Todo = await TodoModel.query().patchAndFetchById(id, data);
+        let todo: Todo = await updateTodo(id, data);
+        let subtasks: number;
+
+        if (data.status === "COMPLETED") {
+            subtasks = await updateAllSubTasks(id, data);
+        }
 
         if (todo) {
             res
