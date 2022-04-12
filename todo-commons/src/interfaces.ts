@@ -1,5 +1,5 @@
 
-export interface Task {
+export interface Todo {
     _id?: string;
     created_at?: Date;
     title: string;
