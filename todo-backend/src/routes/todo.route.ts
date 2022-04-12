@@ -23,8 +23,34 @@ router.post("/", async function (req: Request, res: Response) {
         }
     } catch (error) {
         res
-        .status(500)
-        .send({ error: error });
+            .status(500)
+            .send({ error: error });
+    }
+});
+
+/**
+ * update todo
+ */
+router.patch("/:id", async function (req: Request, res: Response) {
+    try {
+        const data: Todo = req.body;
+        const id = req.params.id;
+
+        const todo: Todo = await TodoModel.query().patchAndFetchById(id, data);
+
+        if (todo) {
+            res
+                .status(200)
+                .send(todo);
+        } else {
+            res
+                .status(500)
+                .send({ error: `todo update failed for data `, data: data });
+        }
+    } catch (error) {
+        res
+            .status(500)
+            .send({ error: error });
     }
 });
 
