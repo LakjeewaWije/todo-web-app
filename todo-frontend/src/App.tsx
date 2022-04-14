@@ -1,20 +1,60 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
-
+import { createSubTask, createTodo, getAllTodos } from './app.service';
+import { Todo, SubTask } from "todo-commons";
 function App() {
 
-  const [name, setName] = useState("");
+  const [todoTitle, setTodo] = useState("");
+  const [subTaskTitle, setSubTask] = useState<any>({ title: "", id: "" });
+  const [list, setList] = useState<Todo | any>([]);
   const [active, setActive] = useState(false)
   const [height, setHeight] = useState('0px')
   const [rotate, setRotate] = useState('transform duration-700 ease');
-  const contentSpace = useRef(null);
-  function toggleAccordion() {
-    setActive(active === false ? true : false)
-    // @ts-ignore
-    setHeight(active ? '0px' : `${contentSpace.current.scrollHeight}px`)
-    setRotate(active ? 'transform duration-700 ease' : 'transform duration-700 ease rotate-180')
+
+
+  useEffect(() => {
+    getTodos()
+  }, []);
+
+  async function getTodos() {
+    const dataRaw = await getAllTodos();
+    const data = await dataRaw.json();
+    console.log("DATA ", data);
+    if (data?.status) {
+      setList(data.value);
+    }
+
   }
+
+  async function createTodos() {
+    const dataRaw = await createTodo({ title: todoTitle });
+    const data = await dataRaw.json();
+    console.log("DATA TODO NEW", data);
+    if (data?.status) {
+      // setList(data.value);
+      setList((list: any) => [...list, data.value]);
+      setTodo("");
+    }
+
+  }
+
+  async function createSubTasks(id: any) {
+    const dataRaw = await createSubTask({ title: subTaskTitle.title, todo_id: id });
+    const data: any = await dataRaw.json();
+    console.log("DATA TODO NEW", data);
+    if (data?.status) {
+      let newArr = [...list]; // copying the old datas array
+      const index = newArr.findIndex((dataArr: Todo) => dataArr.id == data.value.id);
+      newArr[index] = data.value;
+
+      setList(newArr);
+
+      setSubTask({ title: "", id: "" });
+    }
+
+  }
+
   return (
     <div className='flex justify-center'>
       <div className="App flex justify-center my-7 w-4/6 flex-col">
@@ -26,49 +66,54 @@ function App() {
             <input
               type="text"
               className='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
-              value={name}
+              value={todoTitle}
               placeholder="What to do?"
-              onChange={(e) => setName(e.target.value)}
+              onChange={(e) => setTodo(e.target.value)}
             />
           </div>
           <div className="flex-initial w-4/12 px-2">
-            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full" type="button">
+            <button className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full ${!todoTitle ? "opacity-50" : ""}`} type="button"
+              onClick={() => { createTodos() }}
+              disabled={!todoTitle}
+            >
               New List
             </button>
           </div>
         </div>
 
         <div className="accordion" id="accordionExample5">
-          {[1, 2, 3].map((data,index) => (
-            <div className="accordion-item bg-white border border-gray-200">
+          {list.map((data: Todo, index: number) => (
+            <div key={index} className="accordion-item bg-white border border-gray-200">
               <h2 className="accordion-header mb-0" id="headingOne5">
-                <button className="
-        accordion-button
-        relative
-        flex
-        items-center
-        w-full
-        py-4
-        px-5
-        text-base text-gray-800 text-left
-        bg-white
-        border-0
-        rounded-none
-        transition
-        focus:outline-none
-      " type="button" data-bs-toggle="collapse" data-bs-target={"#collapseOne5"+index} aria-expanded="true"
-                  aria-controls={"collapseOne5"+index}>
-                  Accordion Item #1
+                <button className="accordion-button relative flex items-center w-full py-4 px-5 text-base text-gray-800 text-left bg-white border-0 rounded-none transition focus:outline-none" type="button" data-bs-toggle="collapse" data-bs-target={"#collapseOne5" + index} aria-expanded="true"
+                  aria-controls={"collapseOne5" + index}>
+                  <span className='font-bold text-lg'>{index + 1} . {data.title}</span>
                 </button>
               </h2>
-              <div id={"collapseOne5"+index}className="accordion-collapse collapse show" aria-labelledby="headingOne5">
-                <div className="accordion-body py-4 px-5">
-                  <strong>This is the first item's accordion body.</strong> It is shown by default,
-                  until the collapse plugin adds the appropriate classes that we use to style each
-                  element. These classes control the overall appearance, as well as the showing and
-                  hiding via CSS transitions. You can modify any of this with custom CSS or overriding
-                  our default variables. It's also worth noting that just about any HTML can go within
-                  the <code>.accordion-body</code>, though the transition does limit overflow.
+              <div id={"collapseOne5" + index} className="accordion-collapse collapse show" aria-labelledby="headingOne5">
+                {data.subtasks.map((subT: SubTask, index: number) => (
+                  <div key={index} className="flex accordion-body py-4 px-5 border-b-2 border-b-blue-500">
+                    <span className='font-semibold'>{index + 1} . {subT.title}</span>
+                  </div>
+                ))}
+                <div className="flex flex-row p-4">
+                  <div className="flex-none w-8/12">
+                    <input
+                      type="text"
+                      className='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
+                      value={subTaskTitle.id == data.id ? subTaskTitle.title : ''}
+                      placeholder="What are the steps?"
+                      onChange={(e) => setSubTask({ title: e.target.value, id: data.id })}
+                    />
+                  </div>
+                  <div className="flex-initial w-4/12 px-2">
+                    <button className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full ${(!subTaskTitle.title || subTaskTitle.id != data.id) ? "opacity-50" : ""}`} type="button"
+                      onClick={() => { createSubTasks(data.id) }}
+                      disabled={!subTaskTitle.title && !subTaskTitle.id}
+                    >
+                      New Step
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
