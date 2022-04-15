@@ -42,3 +42,29 @@ export async function createSubTask(body: any) {
         body: JSON.stringify(body)
     });
 }
+
+export async function updateTodo(body: any, id: any) {
+    const url = `${host}${end_points.todo.prefix}/${id}`;
+
+    return fetch(url, {
+        method: 'PATCH',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(body)
+    });
+}
+
+export async function updateSubTask(body: any, id: any) {
+    const url = `${host}${end_points.subtask.prefix}/${id}`;
+
+    return fetch(url, {
+        method: 'PATCH',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(body)
+    });
+}

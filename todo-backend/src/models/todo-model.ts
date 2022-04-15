@@ -13,6 +13,9 @@ export class TodoModel extends db.BaseModel {
             subtasks: {
                 relation: db.BaseModel.HasManyRelation,
                 modelClass: SubTaskModel,
+                filter: (query: any) => {
+                    query.orderBy("id",'ASC');
+                },
                 join: {
                     from: "public.todo.id",
                     to: "public.subtask.todo_id",
