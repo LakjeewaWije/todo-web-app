@@ -17,11 +17,11 @@ export class TodoService {
     }
 
     public static async getAllTodos() {
-        return TodoModel.query().withGraphFetched("subtasks");
+        return TodoModel.query().withGraphFetched("subtasks").orderBy("id",'ASC');
     }
 
     public static async getSingleTodo(id: string) {
-        return TodoModel.query().withGraphFetched("subtasks").where("id", id).first();
+        return TodoModel.query().withGraphFetched("subtasks").where("id", id).first().orderBy("id",'ASC');
     }
 
 
