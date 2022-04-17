@@ -81,3 +81,17 @@ export async function getSingleTodo(req: Request, res: Response) {
             .send(OperationResult.failed(error.message));
     }
 }
+
+export async function deleteTodos(req: Request, res: Response) {
+    try {
+        const id = req.params.id;
+        let todo: any = await TodoService.deleteTodo(id);
+        return res
+            .status(200)
+            .send(OperationResult.success(todo));
+    } catch (error) {
+        return res
+            .status(500)
+            .send(OperationResult.failed(error.message));
+    }
+}

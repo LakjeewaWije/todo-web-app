@@ -68,3 +68,15 @@ export async function updateSubTask(body: any, id: any) {
         body: JSON.stringify(body)
     });
 }
+
+export async function deleteTodo(id: any) {
+    const url = `${host}${end_points.todo.prefix}/${id}`;
+
+    return fetch(url, {
+        method: 'DELETE',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+    });
+}

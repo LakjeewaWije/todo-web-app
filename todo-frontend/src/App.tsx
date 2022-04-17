@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import { createSubTask, createTodo, getAllTodos, updateSubTask, updateTodo } from './app.service';
+import { createSubTask, createTodo, deleteTodo, getAllTodos, updateSubTask, updateTodo } from './app.service';
 import { Todo, SubTask } from "todo-commons";
 function TodoComponent() {
 
@@ -97,6 +97,24 @@ function TodoComponent() {
 
   }
 
+  async function deleteTodos(id: any) {
+    setIsLoading(true);
+    const dataRaw = await deleteTodo(id);
+    const data = await dataRaw.json();
+    // console.log("DATA TODO DELETE", data);
+    if (data?.status) {
+      let newArr = [...list]; // copying the old datas array
+      const index = newArr.findIndex((dataArr: Todo) => dataArr.id == id);
+      console.log("index ", index);
+
+      newArr.splice(index, 1);
+
+      setList(newArr);
+      setIsLoading(false);
+    }
+
+  }
+
 
   return (
     <div className='flex justify-center'>
@@ -156,7 +174,9 @@ function TodoComponent() {
                     <span className='font-bold text-lg text-blue-500' id={data.id}>{data.title}</span>
                   </button>
                 </div>
-
+                <div className="flex w-1/6 content-center justify-center items-center border-b border-b-gray-200" >
+                  <svg onClick={() => { deleteTodos(data.id) }} data-testid={"todo-task-delete" + data.id} style={{ fill: '#df2b2b', cursor:'pointer' }} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M20 4h-20v-2h5.711c.9 0 1.631-1.099 1.631-2h5.316c0 .901.73 2 1.631 2h5.711v2zm-7 15.5c0-1.267.37-2.447 1-3.448v-6.052c0-.552.447-1 1-1s1 .448 1 1v4.032c.879-.565 1.901-.922 3-1.006v-7.026h-18v18h13.82c-1.124-1.169-1.82-2.753-1.82-4.5zm-7 .5c0 .552-.447 1-1 1s-1-.448-1-1v-10c0-.552.447-1 1-1s1 .448 1 1v10zm5 0c0 .552-.447 1-1 1s-1-.448-1-1v-10c0-.552.447-1 1-1s1 .448 1 1v10zm13-.5c0 2.485-2.017 4.5-4.5 4.5s-4.5-2.015-4.5-4.5 2.017-4.5 4.5-4.5 4.5 2.015 4.5 4.5zm-3.086-2.122l-1.414 1.414-1.414-1.414-.707.708 1.414 1.414-1.414 1.414.707.708 1.414-1.414 1.414 1.414.708-.708-1.414-1.414 1.414-1.414-.708-.708z" /></svg>
+                </div>
               </div>
 
               <div id={"collapseOne5" + data.id} className="accordion-collapse collapse show" aria-labelledby="headingOne5">
