@@ -4,9 +4,9 @@ The Todo App is to maintain your todo list.
 
 ## Application consists of 3 directories 
 
-1. todo-frontend - front end of the application
-2. todo-backend - back end of the application
-3. todo-commons - shared resources for both todo-frontend and todo-backend
+1. todo-frontend - front end of the application - reactjs
+2. todo-backend - back end of the application - nodejs (express)
+3. todo-commons - shared resources for both todo-frontend and todo-backend - local npm package
 
 ## To Run the application
 
@@ -32,6 +32,11 @@ Ps: Please follow the instructions accordingly...
     then your frontend application will serve on "http://localhost:3000/"
 
 
+## To seed data 
+
+1. Navigate to todo-backend and run "npx knex seed:run"
+
+
 ## To Run the tests in Front End
 
 Ps - Make sure you run Backend before running front end tests
@@ -51,3 +56,4 @@ Ps - Make sure you stop Backend before running back end tests to make sure the p
     1. Do "npm run test"
     2. coverage directory will be generated inside the todo-backend directory
     3. Navigate to coverage/Iconv-report and open index.html file in your browser to see the code coverage results.
+
