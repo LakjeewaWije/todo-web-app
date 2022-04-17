@@ -44,7 +44,10 @@
     ]
   },
   "jest": {
-    "coverageReporters": ["json", "html"]
+    "coverageReporters": [
+      "json",
+      "html"
+    ]
   },
   "devDependencies": {
     "autoprefixer": "^10.4.4",
