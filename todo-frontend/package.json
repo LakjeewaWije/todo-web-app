@@ -22,6 +22,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "coverage": "react-scripts test --env=jsdom --watchAll=false --collectCoverage",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -42,8 +43,12 @@
       "last 1 safari version"
     ]
   },
+  "jest": {
+    "coverageReporters": ["json", "html"]
+  },
   "devDependencies": {
     "autoprefixer": "^10.4.4",
+    "enzyme": "^3.11.0",
     "postcss": "^8.4.12",
     "tailwindcss": "^3.0.24"
   }
