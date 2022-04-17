@@ -4,7 +4,7 @@ import { db } from "./database";
 import bodyParser from "body-parser";
 import cors from "cors";
 
-const app = express();
+var app = express();
 
 const port = 4000;
 
@@ -32,3 +32,5 @@ app.listen(port, () => {
   db.initDb();
   console.log(`Ok. Connected to PG`);
 })
+
+export default app;
