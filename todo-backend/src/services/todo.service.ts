@@ -1,5 +1,5 @@
 import { Todo } from "todo-commons";
-import { TodoModel } from "../models/todo-model";
+import { SubTaskModel, TodoModel } from "../models/todo-model";
 
 export class TodoService {
 
@@ -17,11 +17,16 @@ export class TodoService {
     }
 
     public static async getAllTodos() {
-        return TodoModel.query().withGraphFetched("subtasks").orderBy("id",'ASC');
+        return TodoModel.query().withGraphFetched("subtasks").orderBy("id", 'ASC');
     }
 
     public static async getSingleTodo(id: string) {
-        return TodoModel.query().withGraphFetched("subtasks").where("id", id).first().orderBy("id",'ASC');
+        return TodoModel.query().withGraphFetched("subtasks").where("id", id).first().orderBy("id", 'ASC');
+    }
+
+    public static async deleteTodo(id: string) {
+        await SubTaskModel.query().delete().where("todo_id", id);
+        return TodoModel.query().deleteById(id).first();
     }
 
 

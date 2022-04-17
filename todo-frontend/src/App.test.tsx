@@ -148,4 +148,29 @@ describe('Todo component functionalities', function () {
     expect(subTaskCheckBoxElement).toBeChecked();
   });
 
+  test('delete the todo', async () => {
+
+    const dom: any = await act(async () => { render(<TodoComponent />) });
+
+    await new Promise((r) => setTimeout(r, 2000));
+
+    const sampleTestTitle = screen.getByText(/sample test todo/i);
+    expect(sampleTestTitle).toBeInTheDocument();
+
+    const id = sampleTestTitle.id;
+
+    const mainTodoDleteBtn = "todo-task-delete" + id;
+
+    const mainTodoDleteBtnElement: any = screen.getByTestId(mainTodoDleteBtn);
+    expect(mainTodoDleteBtnElement).toBeInTheDocument();
+
+    act(() => { fireEvent.click(mainTodoDleteBtnElement); });
+
+    await new Promise((r) => setTimeout(r, 2000));
+
+    expect(sampleTestTitle).not.toBeInTheDocument();
+
+
+  });
+
 });
