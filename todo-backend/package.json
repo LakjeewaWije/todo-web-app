@@ -4,7 +4,7 @@
   "description": "todo app backend",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest --collectCoverage",
     "start": "nodemon src/index.ts",
     "build": "tsc",
     "start:prod": "node ./dist/index.js"
@@ -25,7 +25,12 @@
   },
   "devDependencies": {
     "@types/cors": "^2.8.12",
+    "@types/jest": "^27.4.1",
+    "@types/supertest": "^2.0.12",
+    "jest": "^27.5.1",
     "nodemon": "^2.0.15",
+    "supertest": "^6.2.2",
+    "ts-jest": "^27.1.4",
     "ts-node": "^10.7.0",
     "typescript": "^4.6.3"
   }

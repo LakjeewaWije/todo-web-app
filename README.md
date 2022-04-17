@@ -10,7 +10,7 @@ The Todo App is to maintain your todo list.
 
 ## To Run the application
 
-
+Ps: Please follow the instructions accordingly...
 
 1. Navigate to todo-commons directory and ,
     
@@ -32,10 +32,22 @@ The Todo App is to maintain your todo list.
     then your frontend application will serve on "http://localhost:3000/"
 
 
-## To Run the tests
+## To Run the tests in Front End
+
+Ps - Make sure you run Backend before running front end tests
 
 1. To run frontend tests and get the coverage report navigate to todo-frontend directory and
 
     1. Do "npm run coverage"
     2. coverage directory will be generated inside the todo-frontend directory
-    3. Open index.html file in your browser to see the code coverage results
+    3. Navigate to coverage/ open index.html file in your browser to see the code coverage results
+
+## To Run the tests in Back End
+
+Ps - Make sure you stop Backend before running back end tests to make sure the port 4000 is free
+
+1. To run backend tests and get the coverage report navigate to todo-backend directory and
+
+    1. Do "npm run test"
+    2. coverage directory will be generated inside the todo-backend directory
+    3. Navigate to coverage/Iconv-report and open index.html file in your browser to see the code coverage results.
