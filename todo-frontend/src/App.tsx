@@ -3,7 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 import { createSubTask, createTodo, getAllTodos, updateSubTask, updateTodo } from './app.service';
 import { Todo, SubTask } from "todo-commons";
-function App() {
+function TodoComponent() {
 
   const [todoTitle, setTodo] = useState("");
   const [subTaskTitle, setSubTask] = useState<any>({ title: "", id: "" });
@@ -32,7 +32,7 @@ function App() {
     setIsLoading(true);
     const dataRaw = await createTodo({ title: todoTitle });
     const data = await dataRaw.json();
-    console.log("DATA TODO NEW", data);
+    // console.log("DATA TODO NEW", data);
     if (data?.status) {
       // setList(data.value);
       setList((list: any) => [...list, data.value]);
@@ -46,7 +46,7 @@ function App() {
     setIsLoading(true);
     const dataRaw = await createSubTask({ title: subTaskTitle.title, todo_id: id });
     const data: any = await dataRaw.json();
-    console.log("DATA SUB NEW", data);
+    // console.log("DATA SUB NEW", data);
     if (data?.status) {
       let newArr = [...list]; // copying the old datas array
       const index = newArr.findIndex((dataArr: Todo) => dataArr.id == data.value.id);
@@ -65,7 +65,7 @@ function App() {
     setIsLoading(true);
     const dataRaw = await updateTodo({ status: status ? "COMPLETED" : "PENDING" }, id);
     const data = await dataRaw.json();
-    console.log("DATA TODO UPDATE", data);
+    // console.log("DATA TODO UPDATE", data);
     if (data?.status) {
       let newArr = [...list]; // copying the old datas array
       const index = newArr.findIndex((dataArr: Todo) => dataArr.id == data.value.id);
@@ -83,7 +83,7 @@ function App() {
     setIsLoading(true);
     const dataRaw = await updateSubTask({ status: status ? "COMPLETED" : "PENDING" }, id);
     const data = await dataRaw.json();
-    console.log("DATA SUB UPDATE", data);
+    // console.log("DATA SUB UPDATE", data);
     if (data?.status) {
       let newArr = [...list]; // copying the old datas array
       const index = newArr.findIndex((dataArr: Todo) => dataArr.id == data.value.id);
@@ -127,6 +127,8 @@ function App() {
               type="text"
               className='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
               value={todoTitle}
+              name="todo-input"
+              aria-label="todo-input"
               placeholder="What to do?"
               onChange={(e) => setTodo(e.target.value)}
             />
@@ -146,32 +148,33 @@ function App() {
             <div key={index} className="accordion-item bg-white border border-gray-200">
               <div className='flex'>
                 <div className="flex w-1/6 content-center justify-center items-center border-b border-b-gray-200" >
-                  <input onChange={(e) => { updateTodos(e.target.checked, data.id) }} disabled={data.status === "COMPLETED" ? true : false} checked={data.status === "COMPLETED" ? true : false} className="form-check-input appearance-none h-6 w-6 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 bg-no-repeat bg-center bg-contain cursor-pointer" type="checkbox" value="" id="flexCheckDefault" />
+                  <input data-testid={"todo-task" + data.id} onChange={(e) => { updateTodos(e.target.checked, data.id) }} disabled={data.status === "COMPLETED" ? true : false} checked={data.status === "COMPLETED" ? true : false} className="form-check-input appearance-none h-6 w-6 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 bg-no-repeat bg-center bg-contain cursor-pointer" type="checkbox" value="" id="flexCheckDefault" />
                 </div>
                 <div className="accordion-header mb-0 w-5/6" id="headingOne5">
-                  <button className="accordion-button relative flex items-center w-full py-4 px-5 text-base text-gray-800 text-left bg-white border-0 rounded-none transition focus:outline-none" type="button" data-bs-toggle="collapse" data-bs-target={"#collapseOne5" + index} aria-expanded="true"
-                    aria-controls={"collapseOne5" + index}>
-                    <span className='font-bold text-lg text-blue-500'>{data.title}</span>
+                  <button className="accordion-button relative flex items-center w-full py-4 px-5 text-base text-gray-800 text-left bg-white border-0 rounded-none transition focus:outline-none" type="button" data-bs-toggle="collapse" data-bs-target={"#collapseOne5" + data.id} aria-expanded="true"
+                    aria-controls={"collapseOne5" + data.id}>
+                    <span className='font-bold text-lg text-blue-500' id={data.id}>{data.title}</span>
                   </button>
                 </div>
 
               </div>
 
-              <div id={"collapseOne5" + index} className="accordion-collapse collapse show" aria-labelledby="headingOne5">
+              <div id={"collapseOne5" + data.id} className="accordion-collapse collapse show" aria-labelledby="headingOne5">
                 {data.subtasks.map((subT: SubTask, index: number) => (
                   <div className='flex' key={index + "$"}>
                     <div className="flex w-1/6 content-center justify-center items-center border-b-2 border-b-blue-500" >
-                      <input onChange={(e) => { updateSubTasks(e.target.checked, subT.id) }} checked={subT.status === "COMPLETED" ? true : false} className="form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 bg-no-repeat bg-center bg-contain cursor-pointer" type="checkbox" value="" id="flexCheckDefault" />
+                      <input data-testid={"todo-sub-task" + data.id} onChange={(e) => { updateSubTasks(e.target.checked, subT.id) }} checked={subT.status === "COMPLETED" ? true : false} className="form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 bg-no-repeat bg-center bg-contain cursor-pointer" type="checkbox" value="" id="flexCheckDefault" />
                     </div>
                     <div key={index} className="flex accordion-body py-4 px-5 border-b-2 border-b-blue-500 w-5/6">
                       <span className='font-semibold'>{subT.title}</span>
                     </div>
                   </div>
                 ))}
-                <div className="flex flex-row p-4">
+                <div className="flex flex-row p-4" data-testid={data.id}>
                   <div className="flex-none w-8/12">
                     <input
                       type="text"
+                      data-testid={"subtask-input" + data.id}
                       className='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
                       value={subTaskTitle.id == data.id ? subTaskTitle.title : ''}
                       placeholder="What are the steps?"
@@ -179,7 +182,7 @@ function App() {
                     />
                   </div>
                   <div className="flex-initial w-4/12 px-2">
-                    <button className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full ${(!subTaskTitle.title || subTaskTitle.id != data.id) ? "opacity-50" : ""}`} type="button"
+                    <button data-testid={"subtask-btn" + data.id} className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full ${(!subTaskTitle.title || subTaskTitle.id != data.id) ? "opacity-50" : ""}`} type="button"
                       onClick={() => { createSubTasks(data.id) }}
                       disabled={!subTaskTitle.title && !subTaskTitle.id}
                     >
@@ -199,4 +202,4 @@ function App() {
   );
 }
 
-export default App;
+export default TodoComponent;
